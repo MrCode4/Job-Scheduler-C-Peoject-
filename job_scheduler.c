@@ -358,12 +358,31 @@ void run_job()
         {
             sleep(10);
 
+            char buf[MAX_LEN];
+            char output_text[MAX_LEN];
+            char error_text[MAX_LEN] = "";
+            FILE *fp;
+
+            if ((fp = popen(jobs[job_id].cmd, "r")) == NULL) {
+                strcpy(error_text,"Error opening pipe!\n") ;
+            }
+            else
+            {
+                while (fgets(buf, MAX_LEN, fp) != NULL) {
+                    strcat(output_text, buf);
+                }
+
+                if (pclose(fp)) {
+                    strcat(error_text, "Command not found or exited with error status\n");
+                }
+            }
+
             char* name = int_to_string(job_id);
             char* out_file_name = add_two_string(name, ".out");
             char* err_file_name = add_two_string(name, ".err");
 
-            create_write_file(out_file_name, "");
-            create_write_file(err_file_name, "");
+            create_write_file(out_file_name, output_text);
+            create_write_file(err_file_name, error_text);
         }
         else
         {
