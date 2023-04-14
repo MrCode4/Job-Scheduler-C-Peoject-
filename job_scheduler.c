@@ -52,6 +52,7 @@ pid_t child_pid;
 
 FILE* file;
 
+//Convert int to string
 char* int_to_string(int num)
 {
     char* string = malloc(sizeof(char) * MAX_LEN);
@@ -60,6 +61,7 @@ char* int_to_string(int num)
     return string; 
 }
 
+//Read command from file "input.in"
 char* get_input()
 {
     file = fopen("input.in", "r");
@@ -87,6 +89,7 @@ char* get_input()
     return input;
 }
 
+//Open input.in file and write command to file
 void open_write_to_file(char* input[], int size)
 {
     file = fopen("input.in", "w"); // "w" defines "writing mode"
@@ -101,11 +104,13 @@ void open_write_to_file(char* input[], int size)
     fclose(file);
 }
 
+//Convert Status to string 
 const char* status_to_string(int ix)
 {
     return status_array[ix];
 }
 
+//return current time 
 char* get_current_time()
 {
     time_t t;   // not a primitive datatype
@@ -121,11 +126,13 @@ char* get_current_time()
     return current_time;
 }
 
+//print invalid command to terminal
 void print_invalid_command()
 {
     puts("Invalid Command!");
 }
 
+//Submit task
 void submit()
 {
     signal(SIG_SUBMIT, submit);
@@ -145,6 +152,7 @@ void submit()
     jobs_number++;
 }
 
+//Return length of num
 int len(int num)
 {
     if(num == 0)
@@ -160,6 +168,7 @@ int len(int num)
     return res;
 }
 
+//Show running and waiting jobs
 void show_jobs()
 {
     signal(SIG_SHOW_JOB, show_jobs);
@@ -185,6 +194,7 @@ void show_jobs()
     }   
 }
 
+//Show Completely jobs
 void submit_history()
 {
     signal(SIG_SUBMIT_HISTORY, submit_history);
@@ -218,6 +228,7 @@ void submit_history()
     }
 }
 
+//Ready for getting command
 void print_command()
 {
     printf("Enter Command> ");
@@ -280,6 +291,7 @@ void print_command()
     print_command();
 }
 
+//Check that is file created or not
 bool is_file_created(char* file_name)
 {
     file = fopen(file_name, "r");
@@ -295,6 +307,7 @@ bool is_file_created(char* file_name)
     return is_exist;
 }
 
+//Merge name1 and name2 and return combined of them
 char* add_two_string(char* name1, char* name2)
 {
     char* final_string = (char *) malloc(strlen(name1) + strlen(name2) + 1);
@@ -305,6 +318,7 @@ char* add_two_string(char* name1, char* name2)
     
 }
 
+//Check status of running jobs
 void check_running_job_status()
 {
     running_numbers = 0;
@@ -331,6 +345,7 @@ void check_running_job_status()
     }
 }
 
+//Create output and error file after running job
 void create_write_file(char* file_name, char* text)
 {
     file = fopen(file_name, "w"); // "w" defines "writing mode"
@@ -342,6 +357,8 @@ void create_write_file(char* file_name, char* text)
 
     fclose(file);
 }
+
+//Runn job
 void run_job()
 {
     int job_id = queue_delete(waiting_jobs);
