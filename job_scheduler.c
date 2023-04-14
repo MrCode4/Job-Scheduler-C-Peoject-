@@ -108,13 +108,14 @@ const char* status_to_string(int ix)
 
 char* get_current_time()
 {
-    time_t rawtime;
-    struct tm * timeinfo;
+    time_t t;   // not a primitive datatype
+    time(&t);
 
-    time ( &rawtime );
-    timeinfo = localtime ( &rawtime );
+    char* current_time = malloc(sizeof(char) * MAX_LEN); char* time1 = ctime(&t);
 
-    char * current_time = asctime (timeinfo);
+    for(int i=0;i<strlen(time1);i++)
+        current_time[i] = time1[i];
+
     current_time[strlen(current_time)-1] = '\0';
 
     return current_time;
@@ -352,11 +353,9 @@ void run_job()
         jobs[job_id].start_time = get_current_time();
         jobs[job_id].status = RUNNING;
 
-        jobs[job_id].process_id = fork();
+        pid_t pid = fork();
         if(getpid() != current_pid)
         {
-            jobs[job_id].process_id = getpid();
-
             sleep(10);
 
             char* name = int_to_string(job_id);
@@ -365,6 +364,10 @@ void run_job()
 
             create_write_file(out_file_name, "");
             create_write_file(err_file_name, "");
+        }
+        else
+        {
+            jobs[job_id].process_id = pid;
         }
     }
 }
@@ -390,7 +393,7 @@ int main(int argc, char **argv)
 
     pid_t main_pid = getpid();
     
-    child_pid = fork();
+    pid_t pid = fork();
     if(getpid() != main_pid)
     {
         child_pid = getpid();
@@ -409,6 +412,9 @@ int main(int argc, char **argv)
             sleep(1);
         }
     }
+    else 
+        child_pid = pid;
+
 
     print_command();
 
