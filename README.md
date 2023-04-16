@@ -22,5 +22,4 @@ Run job_scheduler:
     
 ## Screenshots
 
-![App Screenshot](https://yourimageshare.com/ib/1yCoQxWTRt)
-
+- [App Screenshot](https://yourimageshare.com/ib/1yCoQxWTRt)
